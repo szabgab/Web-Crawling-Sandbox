@@ -13,6 +13,11 @@ WriteMakefile(
 		'Test::WWW::Mechanize'       => 1.44,
 		'Test::WWW::Mechanize::PSGI' => 0.35,
 		'Test::More'                 => 1,
+		'Plack::Test'                => 0,
+		'HTTP::Request::Common'      => 0,
+		'Path::Tiny'                 => 0,
+
+
 	},
 	dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
 );
