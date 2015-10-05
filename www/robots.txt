@@ -1,0 +1,5 @@
+User-agent: Proper 
+Disallow: /hidden/protected
+
+User-agent: *
+Disallow: /hidden
