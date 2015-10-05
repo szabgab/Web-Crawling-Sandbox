@@ -17,8 +17,7 @@ WriteMakefile(
 		'Plack::Middleware::DirIndex' => 0,
 		'HTTP::Request::Common'       => 0,
 		'Path::Tiny'                  => 0,
-
-
+        'LWP::Simple'                 => 0,
 	},
 	dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
 );
