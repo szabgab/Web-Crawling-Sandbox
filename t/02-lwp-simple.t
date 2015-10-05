@@ -1,14 +1,8 @@
 use strict;
 use warnings;
 
-my $port = 5001 + int rand(100);
-
-my $pid = fork();
-if (not $pid) {
-    exec "plackup -p $port --access-log /dev/null   app.psgi";
-}
-
-sleep 1; # give time server to launch
+use t::lib::Test;
+my ($port) = t::lib::Test::run();
 
 # LWP::Simple can only download a page. It does not 'understand' the HTML it fetched nor would it
 # abide by the rules of robots.txt
@@ -17,7 +11,6 @@ eval "use Test::More";
 eval "use LWP::Simple qw(get)";
 eval "use Path::Tiny qw(path)";
 
-eval "use t::lib::Test";
 
 plan(tests => 1 * @t::lib::Test::pages);
 diag("Port $port");
@@ -33,7 +26,4 @@ foreach my $page (@t::lib::Test::pages) {
 }
 
 
-END {
-    kill 9, $pid if $pid;
-}
 

@@ -18,6 +18,8 @@ WriteMakefile(
 		'HTTP::Request::Common'       => 0,
 		'Path::Tiny'                  => 0,
         'LWP::Simple'                 => 0,
+		'HTTP::Async'                 => 0,
+		'HTTP::Request'               => 0,
 	},
 	dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
 );
