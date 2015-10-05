@@ -10,6 +10,9 @@ if (not $pid) {
 
 sleep 1; # give time server to launch
 
+# LWP::Simple can only download a page. It does not 'understand' the HTML it fetched nor would it
+# abide by the rules of robots.txt
+
 eval "use Test::More";
 eval "use LWP::Simple qw(get)";
 eval "use Path::Tiny qw(path)";
