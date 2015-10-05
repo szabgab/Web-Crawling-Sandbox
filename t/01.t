@@ -5,9 +5,10 @@ use Plack::Test;
 use HTTP::Request::Common qw(GET);
 use Path::Tiny qw(path);
 
-plan tests => 3;
+plan tests => 4;
 
 my $app = do 'app.psgi';
+isa_ok $app, 'CODE';
 
 my $test = Plack::Test->create($app);
 
