@@ -10,21 +10,22 @@ eval "use HTTP::Async";
 eval "use HTTP::Request";
 eval "use Path::Tiny qw(path)";
 
-plan(tests => 1);
+plan(tests => 2);
 
 my $async = HTTP::Async->new;
+my $URL = "http://127.0.0.1:$port/";
 
 subtest(pages => sub {
 	plan(tests => 3 * @t::lib::Test::pages);
 	
 	foreach my $page (@t::lib::Test::pages) {
-		my $url = "http://127.0.0.1:$port/$page";
+		my $url = "$URL$page";
 		$async->add( HTTP::Request->new( GET => $url ) );
 	}
 	
 	while ( my $response = $async->wait_for_next_response ) { # HTTP::Response
 		#diag($response->base); # though it might not be the original request
-		my $file = substr($response->base, length("http://127.0.0.1/$port/"));
+		my $file = substr($response->base, length($URL));
 		my $content = path("www/$file")->slurp_utf8;
 		is($response->code, 200);
 		is($response->message, 'OK');
@@ -33,10 +34,14 @@ subtest(pages => sub {
 });
 
 
-#{
-#	$async->add( HTTP::Request->new( GET => 'http://127.0.0.1/a' ) );
-#	my $response = $async->wait_for_next_response;
-#	say $response->base;
-#	say $response->content;
-#}
+subtest(redir => sub {
+	plan(tests => 4);
+	$async->add( HTTP::Request->new( GET => $URL . 'a' ) );
+	my $response = $async->wait_for_next_response;
+	is($response->code, 200);
+	is($response->message, 'OK');
+	is($response->base, $URL . 'a.html'); # the URL where we got redirected to
+	my $content = path("www/a.html")->slurp_utf8;
+	is($response->content, $content);
+});
 
