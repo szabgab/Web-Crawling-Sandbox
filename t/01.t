@@ -5,7 +5,7 @@ use Plack::Test;
 use HTTP::Request::Common qw(GET);
 use Path::Tiny qw(path);
 
-plan tests => 1;
+plan tests => 3;
 
 my $app = do 'app.psgi';
 
@@ -15,7 +15,7 @@ subtest main => sub {
 	plan tests => 5;
 	my $main = path('www/index.html')->slurp_utf8;
 
-	my $res = $test->request(GET "/"); # HTTP::Response
+	my $res = $test->request(GET "/");
 	is $res->code, 200;
 	is $res->message, 'OK';
 	#diag $res->headers; #HTTP::Headers
@@ -25,4 +25,25 @@ subtest main => sub {
 	diag $res->header('Last-Modified');
 	is $res->content, $main;
 };
+
+subtest abc => sub {
+	plan tests => 3;
+
+	my $res = $test->request(GET "/abc");
+	is $res->code, 404; 
+	is $res->message, 'Not Found';
+	is $res->content, 'not found';
+};
+
+subtest img => sub {
+	plan tests => 5;
+
+	my $res = $test->request(GET "/img/code_maven.png");
+	is $res->code, 200; 
+	is $res->message, 'OK';
+	is $res->header('Content-Length'), 4271;
+	is $res->header('Content-Type'), 'image/png';
+	is length $res->content, 4271;
+};
+
 
